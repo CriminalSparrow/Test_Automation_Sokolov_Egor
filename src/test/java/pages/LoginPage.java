@@ -2,6 +2,9 @@ package pages;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
@@ -33,17 +36,22 @@ public class LoginPage {
         return this;
     }
 
-    // Нажатие кнопки "Войти"
-    public MainPage clickLogin() {
+    // Успешное нажатие кнопки "Войти"
+    public MainPage clickLoginSuccess() {
         loginButton.click();
         return new MainPage();
     }
 
-    // Комбинированный метод для быстрого входа
-    public MainPage login(String email, String password) {
-        enterEmail(email);
-        enterPassword(password);
-        clickLogin();
-        return new MainPage();
+    // Неуспешное нажатие кнопки "Войти"
+    public LoginPage clickLoginFail() {
+        loginButton.click();
+        return this;
+    }
+
+    public void verifyErrorMessage(String LoginErrorMessage) {
+        final SelenideElement FoundLoginErrorMessage = $x("//div[contains(@class, 'login_error')]");
+        FoundLoginErrorMessage
+                .shouldBe(visible)
+                .shouldHave(text(LoginErrorMessage)); // Проверка точного совпадения
     }
 }
