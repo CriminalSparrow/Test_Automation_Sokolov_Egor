@@ -35,7 +35,7 @@ public class PhotosTest {
 
     @Disabled
     @Test
-    @DisplayName("Удаление фото")
+    @DisplayName("Удаление фото") // (Не написан ещё)
     @Timeout(10)
     void deletePhoto() {
         // Добавляем фото
@@ -43,6 +43,6 @@ public class PhotosTest {
                 .verifyPhotoIsUploaded();
 
         // Затем удаляем фото
-        //photoPage.deletePhotoIfExists().verifyPhotoIsDeleted(); (Не написан ещё)
+        //photoPage.deletePhotoIfExists().verifyPhotoIsDeleted();
     }
 }
