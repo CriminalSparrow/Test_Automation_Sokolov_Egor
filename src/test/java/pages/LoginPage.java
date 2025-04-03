@@ -14,8 +14,8 @@ public class LoginPage {
     // Url
     private final String URL = "https://ok.ru";
     // Локаторы элементов страницы
-    private final SelenideElement emailField = $("#field_email");
-    private final SelenideElement passwordField = $("#field_password");
+    private final SelenideElement emailField = $x("//input[@id='field_email']");
+    private final SelenideElement passwordField = $x("//input[@id='field_password']");
     private final SelenideElement loginButton = $x("//input[@value='Войти в Одноклассники']");
 
     // Открытие страницы логина

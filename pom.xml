@@ -16,6 +16,14 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- junit-jupiter-params -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.9.3</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- Selenide -->
     <dependency>
       <groupId>com.codeborne</groupId>
