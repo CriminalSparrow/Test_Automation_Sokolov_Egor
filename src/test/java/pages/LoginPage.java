@@ -1,56 +1,44 @@
 package pages;
 
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Condition.text;
+import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
 
 
 public class LoginPage {
 
-    // Url
-    private final String URL = "https://ok.ru";
-    // Локаторы элементов страницы
     private final SelenideElement emailField = $x("//input[@id='field_email']");
     private final SelenideElement passwordField = $x("//input[@id='field_password']");
     private final SelenideElement loginButton = $x("//input[@value='Войти в Одноклассники']");
+    private final SelenideElement errorMessage = $x("//div[contains(@class, 'login_error')]");
 
-    // Открытие страницы логина
-    public LoginPage open() {
-        Selenide.open(URL);
-        return this;
-    }
-
-    // Ввод email
+    // Проверяем видимость кнопки ввода Email и вводим Email
     public LoginPage enterEmail(String email) {
-        emailField.setValue(email);
+        emailField.shouldBe(visible.because("Поле Email должно быть видно")).setValue(email);
         return this;
     }
 
-    // Ввод пароля
+    // Проверяем видимость кнопки ввода пароля и вводим пароль
     public LoginPage enterPassword(String password) {
-        passwordField.setValue(password);
+        passwordField.shouldBe(visible.because("Поле пароля должно быть видно")).setValue(password);
         return this;
     }
 
-    // Успешное нажатие кнопки "Войти"
+    // Проверяем видимость кнопки входа и входим
     public MainPage clickLoginSuccess() {
-        loginButton.click();
+        loginButton.shouldBe(visible.because("Кнопка входа должна быть видна")).click();
         return new MainPage();
     }
 
-    // Неуспешное нажатие кнопки "Войти"
+    // Проверяем видимость кнопки входа, входим, но претерпеваем неудачу
     public LoginPage clickLoginFail() {
-        loginButton.click();
+        loginButton.shouldBe(visible.because("Кнопка входа должна быть видна")).click();
         return this;
     }
 
-    public void verifyErrorMessage(String LoginErrorMessage) {
-        final SelenideElement FoundLoginErrorMessage = $x("//div[contains(@class, 'login_error')]");
-        FoundLoginErrorMessage
-                .shouldBe(visible)
-                .shouldHave(text(LoginErrorMessage)); // Проверка точного совпадения
+    // Проверяем видимость сообщения об ошибке входа и возвращаем её текст
+    public String getErrorMessageText() {
+        return errorMessage.shouldBe(visible.because("Сообщение об ошибке должно быть видно")).getText();
     }
 }

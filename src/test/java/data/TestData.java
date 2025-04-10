@@ -1,6 +1,7 @@
 package data;
 
 public class TestData {
+    public static final String BASE_URL = "https://ok.ru";
     public static final String LOGIN = "79936402680";
     public static final String PASSWORD = "testtesttest";
     public static final String NAME = "Тест Тестов";

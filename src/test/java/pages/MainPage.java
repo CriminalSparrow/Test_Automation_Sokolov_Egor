@@ -5,23 +5,28 @@ import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Condition.*;
 
 public class MainPage {
+
     // Локаторы
     private final SelenideElement userName = $x("//div[@class='toolbar_accounts-user_name']");
     private final SelenideElement dropdownButton = $x("//button[@aria-label='Настройки профиля']");
     private final SelenideElement photosButton = $x("//a[@data-l='t,userPhotos']");
-    // Метод для проверки имени
-    public void verifyUserName(String expectedName) {
-        // Кликаем по кнопке, чтобы раскрыть меню, чтоб сделать userName видимым
-        dropdownButton.click();
 
-        userName
-                .shouldBe(visible)
-                .shouldHave(text(expectedName)); // Проверка точного совпадения UserName
+    // Получение имени пользователя после открытия выпадающей менюшки
+    public String getUserName() {
+        dropdownButton
+                .shouldBe(visible.because("Кнопка раскрытия меню профиля должна быть видимой"))
+                .click();
+
+        return userName
+                .shouldBe(visible.because("Имя пользователя должно быть видимым после открытия меню"))
+                .getText();
     }
 
-    // Перейти на Фото
+    // Переход на страницу фотографий
     public PhotosPage clickPhotos() {
-        photosButton.click();
+        photosButton
+                .shouldBe(visible.because("Кнопка перехода к фотографиям должна быть видимой"))
+                .click();
         return new PhotosPage();
     }
 }

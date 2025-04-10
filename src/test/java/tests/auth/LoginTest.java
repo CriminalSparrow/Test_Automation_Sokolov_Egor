@@ -1,40 +1,53 @@
 package tests.auth;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import pages.LoginPage;
 import data.TestData;
+import tests.BaseTest;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("Auth")
-public class LoginTest {
-
+public class LoginTest extends BaseTest {
+    private static final List<String> WRONG_PASSWORDS = List.of("wrongpassword", "123456");
     private LoginPage loginPage;
 
+    static Stream<String> passwordProvider() {
+        return WRONG_PASSWORDS.stream();
+    }
+
     @BeforeEach
-    void setup() {
-        loginPage = new LoginPage().open();
+    void init() {
+        loginPage = new LoginPage();
     }
 
     @Test
     @DisplayName("Успешный вход")
-    @Timeout(10) // Завершим тест, если зависнем на входе
+    @Timeout(10)
     void testSuccessfulLogin() {
-        loginPage.enterEmail(TestData.LOGIN)
+        String actualUserName = loginPage.enterEmail(TestData.LOGIN)
                 .enterPassword(TestData.PASSWORD)
                 .clickLoginSuccess()
-                .verifyUserName(TestData.NAME); // Сверяем UserName на главной странице
+                .getUserName();
+
+        assertEquals(TestData.NAME, actualUserName, "Имя пользователя не совпадает");
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"wrongpassword", "123456"})
+    @MethodSource("passwordProvider")
     @DisplayName("Неуспешный вход")
     void testFailedLogin(String wrongPassword) {
-        loginPage.enterEmail(TestData.LOGIN)
+        String actualError = loginPage.enterEmail(TestData.LOGIN)
                 .enterPassword(wrongPassword)
                 .clickLoginFail()
-                .verifyErrorMessage(TestData.LOGIN_ERROR_MESSAGE);
+                .getErrorMessageText();
+
+        assertEquals(TestData.LOGIN_ERROR_MESSAGE, actualError, "Сообщение об ошибке при неверном входе не совпадает");
     }
 
     @AfterEach
